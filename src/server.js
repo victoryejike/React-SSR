@@ -9,10 +9,13 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res)=>{
-    const body = renderToString(<App />)
+    const sheet = new ServerStyleSheet() //creates stylesheet
+
+    const body = renderToString(sheet.collectStyles(<App />)); //collects stylesheet
+    const styleTags = sheet.getStyleTags() //gets all the tags in the html
     const title = `Server Side Rendered React Application`
 
-    res.send(Html({ body, title }))
+    res.send(Html({ body, styleTags, title }))
 })
 
 app.listen(port);

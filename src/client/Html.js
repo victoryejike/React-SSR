@@ -5,11 +5,12 @@
  * Note we're returning a template string from this function.
  */
 
-const Html = ({ title, body }) => `
+const Html = ({ title, styleTags, body }) => `
     <!DOCTYPE html>
     <html>
         <head>
             <title>${title}</title>
+            ${styleTags}
         </head>
         <body style='margin: 0'>
             <div id='root'>${body}</div>
