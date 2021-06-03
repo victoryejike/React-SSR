@@ -1,9 +1,35 @@
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
-const { DefinePlugin } = require('webpack');
 
-module.exports = {
+const browserConfig = {
+  mode: "production",
+  entry: './src/client/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
+  module: {
+    loaders: [
+        { 
+            test: /\.(js)$/, 
+            loaders: 'babel-loader',
+            query: {
+                presets: ['es2015', 'react']
+            }
+        },
+    ]
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __isBrowser__: "true"
+    })
+  ]
+}
+
+const serverConfig = {
+    mode: "production",
     entry: './src/server.js',
     externals: nodeExternals(),
     target: 'node',
@@ -14,9 +40,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV:   `'production'`
-            }
+            __isBrowser__: "false"
         })
     ],
     module:{

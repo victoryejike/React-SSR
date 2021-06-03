@@ -17,7 +17,7 @@ const App = () => {
     return (
         <AppContainer>
             Welcome to My First SSR<br></br>
-            🎉🎉🎉🎉
+                🎉🎉🎉🎉
         </AppContainer>
     )
 }
