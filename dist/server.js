@@ -90,22 +90,27 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _server = __webpack_require__(4);
+var _cors = __webpack_require__(4);
+
+var _cors2 = _interopRequireDefault(_cors);
+
+var _server = __webpack_require__(5);
 
 var _styledComponents = __webpack_require__(1);
 
-var _App = __webpack_require__(5);
+var _App = __webpack_require__(6);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _Html = __webpack_require__(6);
+var _Html = __webpack_require__(7);
 
 var _Html2 = _interopRequireDefault(_Html);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
-var port = 3000;
+app.use((0, _cors2.default)());
+app.use(_express2.default.static('dist'));
 
 app.get('/', function (req, res) {
     var sheet = new _styledComponents.ServerStyleSheet(); //creates stylesheet
@@ -116,6 +121,8 @@ app.get('/', function (req, res) {
 
     res.send((0, _Html2.default)({ body: body, styleTags: styleTags, title: title }));
 });
+
+var port = 3000;
 
 app.listen(port);
 console.log('server running on ' + port);
@@ -130,10 +137,16 @@ module.exports = require("express");
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-dom/server");
+module.exports = require("cors");
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-dom/server");
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -173,7 +186,7 @@ var App = function App() {
 exports.default = App;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -193,7 +206,7 @@ var Html = function Html(_ref) {
     var title = _ref.title,
         styleTags = _ref.styleTags,
         body = _ref.body;
-    return "\n    <!DOCTYPE html>\n    <html>\n        <head>\n            <title>" + title + "</title>\n            " + styleTags + "\n        </head>\n        <body style='margin: 0'>\n            <div id='root'>" + body + "</div>\n        </body>\n    </html>\n";
+    return "\n    <!DOCTYPE html>\n    <html>\n        <head>\n            <title>" + title + "</title>\n            " + styleTags + "\n            <script src=\"/bundle.js\" defer></script>\n        </head>\n        <body style='margin: 0'>\n            <div id='root'>" + body + "</div>\n        </body>\n    </html>\n";
 };
 
 exports.default = Html;

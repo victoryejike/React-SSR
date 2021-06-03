@@ -1,12 +1,14 @@
 import express from 'express';
 import React from 'react';
+import cors from 'cors';
 import { renderToString } from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
 import App from './client/App';
 import Html from './client/Html';
 
 const app = express();
-const port = 3000;
+app.use(cors());
+app.use(express.static('dist'))
 
 app.get('/', (req, res)=>{
     const sheet = new ServerStyleSheet() //creates stylesheet
@@ -17,6 +19,8 @@ app.get('/', (req, res)=>{
 
     res.send(Html({ body, styleTags, title }))
 })
+
+const port = 3000;
 
 app.listen(port);
 console.log(`server running on ${port}`)

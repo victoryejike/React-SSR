@@ -11,6 +11,7 @@ const Html = ({ title, styleTags, body }) => `
         <head>
             <title>${title}</title>
             ${styleTags}
+            <script src="/bundle.js" defer></script>
         </head>
         <body style='margin: 0'>
             <div id='root'>${body}</div>
