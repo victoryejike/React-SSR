@@ -115,7 +115,7 @@ app.use(_express2.default.static('dist'));
 app.get('/', function (req, res) {
     var sheet = new _styledComponents.ServerStyleSheet(); //creates stylesheet
 
-    var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, null))); //collects stylesheet
+    var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, { data: 'Ejike' }))); //collects stylesheet
     var styleTags = sheet.getStyleTags(); //gets all the tags in the html
     var title = 'Server Side Rendered React Application';
 
@@ -173,11 +173,14 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 // Our single Styled Component definition
 var AppContainer = _styledComponents2.default.div(_templateObject);
 
-var App = function App() {
+var App = function App(_ref) {
+    var data = _ref.data;
+
     return _react2.default.createElement(
         AppContainer,
         null,
-        'Welcome to My First SSR',
+        'Welcome to My First SSR By ',
+        data,
         _react2.default.createElement('br', null),
         '\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89'
     );

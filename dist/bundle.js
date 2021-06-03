@@ -530,7 +530,7 @@ var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _reactDom.hydrate)(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
+(0, _reactDom.hydrate)(_react2.default.createElement(_App2.default, { data: 'Ejike' }), document.getElementById('root'));
 
 /***/ }),
 /* 8 */
@@ -10925,11 +10925,14 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 // Our single Styled Component definition
 var AppContainer = _styledComponents2.default.div(_templateObject);
 
-var App = function App() {
+var App = function App(_ref) {
+    var data = _ref.data;
+
     return _react2.default.createElement(
         AppContainer,
         null,
-        'Welcome to My First SSR',
+        'Welcome to My First SSR By ',
+        data,
         _react2.default.createElement('br', null),
         '\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89'
     );

@@ -13,10 +13,10 @@ const AppContainer = styled.div`
   background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);
 `;
 
-const App = () => {
+const App = ({ data }) => {
     return (
         <AppContainer>
-            Welcome to My First SSR<br></br>
+            Welcome to My First SSR By {data}<br></br>
                 🎉🎉🎉🎉
         </AppContainer>
     )

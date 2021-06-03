@@ -13,7 +13,7 @@ app.use(express.static('dist'))
 app.get('/', (req, res)=>{
     const sheet = new ServerStyleSheet() //creates stylesheet
 
-    const body = renderToString(sheet.collectStyles(<App />)); //collects stylesheet
+    const body = renderToString(sheet.collectStyles(<App data='Ejike' />)); //collects stylesheet
     const styleTags = sheet.getStyleTags() //gets all the tags in the html
     const title = `Server Side Rendered React Application`
 
