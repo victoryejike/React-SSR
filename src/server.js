@@ -5,12 +5,14 @@ import { renderToString } from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
 import App from './client/App';
 import Html from './client/Html';
+import serialize from 'serialize-javascript';
 
 const app = express();
 app.use(cors());
 app.use(express.static('dist'))
 
 app.get('/', (req, res)=>{
+    const name = 'Ejike'
     const sheet = new ServerStyleSheet() //creates stylesheet
 
     const body = renderToString(sheet.collectStyles(<App data='Ejike' />)); //collects stylesheet
