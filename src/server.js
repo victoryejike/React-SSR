@@ -4,7 +4,7 @@ import cors from 'cors';
 import { renderToString } from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
 import App from './client/App';
-import Html from './client/Html';
+//import Html from './client/Html';
 import serialize from 'serialize-javascript';
 
 const app = express();
@@ -19,7 +19,21 @@ app.get('/', (req, res)=>{
     const styleTags = sheet.getStyleTags() //gets all the tags in the html
     const title = `Server Side Rendered React Application`
 
-    res.send(Html({ body, styleTags, title }))
+    res.send(`
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>${title}</title>
+            ${styleTags}
+            <script src="/bundle.js" defer></script>
+        </head>
+        <body style='margin: 0'>
+            <div id='root'>${body}</div>
+
+            <script>window.__INITIAL_DATA__ = ${serialize(name)}</script>
+        </body>
+    </html>`
+    )
 })
 
 const port = 3000;
