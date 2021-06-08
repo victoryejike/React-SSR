@@ -102,24 +102,30 @@ var _App = __webpack_require__(6);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _Html = __webpack_require__(7);
+var _serializeJavascript = __webpack_require__(8);
 
-var _Html2 = _interopRequireDefault(_Html);
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
+var _api = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import Html from './client/Html';
 var app = (0, _express2.default)();
 app.use((0, _cors2.default)());
 app.use(_express2.default.static('dist'));
 
 app.get('/', function (req, res) {
+    var name = 'Ejike';
     var sheet = new _styledComponents.ServerStyleSheet(); //creates stylesheet
 
-    var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, { data: 'Ejike' }))); //collects stylesheet
-    var styleTags = sheet.getStyleTags(); //gets all the tags in the html
-    var title = 'Server Side Rendered React Application';
+    (0, _api.fetchPopularRepos)().then(function (data) {
+        var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, { data: data }))); //collects stylesheet
+        var styleTags = sheet.getStyleTags(); //gets all the tags in the html
+        var title = 'Server Side Rendered React Application';
 
-    res.send((0, _Html2.default)({ body: body, styleTags: styleTags, title: title }));
+        res.send('\n        <!DOCTYPE html>\n        <html>\n            <head>\n                <title>' + title + '</title>\n                ' + styleTags + '\n                <script src="/bundle.js" defer></script>\n            </head>\n            <body style=\'margin: 0\'>\n                <div id=\'root\'>' + body + '</div>\n\n                <script>window.__INITIAL_DATA__ = ' + (0, _serializeJavascript2.default)(data) + '</script>\n            </body>\n        </html>');
+    });
 });
 
 var port = 3000;
@@ -153,10 +159,10 @@ module.exports = require("react-dom/server");
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n'], ['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  min-width: 100%;\n  min-height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n'], ['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  min-width: 100%;\n  min-height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n']);
 
 var _react = __webpack_require__(0);
 
@@ -166,6 +172,10 @@ var _styledComponents = __webpack_require__(1);
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
+var _grid = __webpack_require__(7);
+
+var _grid2 = _interopRequireDefault(_grid);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
@@ -174,16 +184,13 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 var AppContainer = _styledComponents2.default.div(_templateObject);
 
 var App = function App(_ref) {
-    var data = _ref.data;
+  var data = _ref.data;
 
-    return _react2.default.createElement(
-        AppContainer,
-        null,
-        'Welcome to My First SSR By ',
-        data,
-        _react2.default.createElement('br', null),
-        '\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89'
-    );
+  return _react2.default.createElement(
+    AppContainer,
+    null,
+    _react2.default.createElement(_grid2.default, { repos: data })
+  );
 };
 
 exports.default = App;
@@ -198,21 +205,110 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-/**
- * Html
- * This Html.js file acts as a template that we insert all our generated
- * application code into before sending it to the client as regular HTML.
- * Note we're returning a template string from this function.
- */
 
-var Html = function Html(_ref) {
-    var title = _ref.title,
-        styleTags = _ref.styleTags,
-        body = _ref.body;
-    return "\n    <!DOCTYPE html>\n    <html>\n        <head>\n            <title>" + title + "</title>\n            " + styleTags + "\n            <script src=\"/bundle.js\" defer></script>\n        </head>\n        <body style='margin: 0'>\n            <div id='root'>" + body + "</div>\n        </body>\n    </html>\n";
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Grid = function Grid(_ref) {
+    var repos = _ref.repos;
+
+    return _react2.default.createElement(
+        'ul',
+        { className: 'grid' },
+        repos.map(function (_ref2, i) {
+            var name = _ref2.name,
+                owner = _ref2.owner,
+                stargazers_count = _ref2.stargazers_count,
+                html_url = _ref2.html_url;
+            return _react2.default.createElement(
+                'li',
+                { key: name },
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    '#',
+                    i + 1
+                ),
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: html_url },
+                        name
+                    )
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    'by ',
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://github.com/' + owner.login },
+                        '@',
+                        owner.login
+                    )
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    stargazers_count.toLocaleString(),
+                    ' stars'
+                )
+            );
+        })
+    );
 };
 
-exports.default = Html;
+exports.default = Grid;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchPopularRepos = fetchPopularRepos;
+
+var _isomorphicFetch = __webpack_require__(10);
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function fetchPopularRepos() {
+  var language = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'all';
+
+  var encodedURI = encodeURI('https://api.github.com/search/repositories?q=stars:>1+language:' + language + '&sort=stars&order=desc&type=Repositories');
+
+  return (0, _isomorphicFetch2.default)(encodedURI).then(function (data) {
+    return data.json();
+  }).then(function (repos) {
+    return repos.items;
+  }).catch(function (error) {
+    console.warn(error);
+    return null;
+  });
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-fetch");
 
 /***/ })
 /******/ ]);

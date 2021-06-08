@@ -6,6 +6,7 @@ import { ServerStyleSheet } from 'styled-components';
 import App from './client/App';
 //import Html from './client/Html';
 import serialize from 'serialize-javascript';
+import { fetchPopularRepos } from './client/api';
 
 const app = express();
 app.use(cors());
@@ -15,25 +16,30 @@ app.get('/', (req, res)=>{
     const name = 'Ejike'
     const sheet = new ServerStyleSheet() //creates stylesheet
 
-    const body = renderToString(sheet.collectStyles(<App data='Ejike' />)); //collects stylesheet
-    const styleTags = sheet.getStyleTags() //gets all the tags in the html
-    const title = `Server Side Rendered React Application`
+    fetchPopularRepos()
+    .then(data=>{
+        const body = renderToString(sheet.collectStyles(<App data={data} />)); //collects stylesheet
+        const styleTags = sheet.getStyleTags() //gets all the tags in the html
+        const title = `Server Side Rendered React Application`
 
-    res.send(`
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <title>${title}</title>
-            ${styleTags}
-            <script src="/bundle.js" defer></script>
-        </head>
-        <body style='margin: 0'>
-            <div id='root'>${body}</div>
+        res.send(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>${title}</title>
+                ${styleTags}
+                <script src="/bundle.js" defer></script>
+            </head>
+            <body style='margin: 0'>
+                <div id='root'>${body}</div>
 
-            <script>window.__INITIAL_DATA__ = ${serialize(name)}</script>
-        </body>
-    </html>`
-    )
+                <script>window.__INITIAL_DATA__ = ${serialize(data)}</script>
+            </body>
+        </html>`
+        )
+    })
+    
+    
 })
 
 const port = 3000;

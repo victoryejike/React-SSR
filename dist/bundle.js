@@ -530,7 +530,7 @@ var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _reactDom.hydrate)(_react2.default.createElement(_App2.default, { data: 'Ejike' }), document.getElementById('root'));
+(0, _reactDom.hydrate)(_react2.default.createElement(_App2.default, { data: window.__INITIAL_DATA__ }), document.getElementById('root'));
 
 /***/ }),
 /* 8 */
@@ -10905,10 +10905,10 @@ if (process.env.NODE_ENV !== "production") {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
-var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n'], ['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  min-width: 100%;\n  min-height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n'], ['\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  min-width: 100%;\n  min-height: 100%;\n  font-size: 40px;\n  background: linear-gradient(20deg, rgb(219, 112, 147), #daa357);\n']);
 
 var _react = __webpack_require__(1);
 
@@ -10918,6 +10918,10 @@ var _styledComponents = __webpack_require__(19);
 
 var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
+var _grid = __webpack_require__(30);
+
+var _grid2 = _interopRequireDefault(_grid);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
@@ -10926,16 +10930,13 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 var AppContainer = _styledComponents2.default.div(_templateObject);
 
 var App = function App(_ref) {
-    var data = _ref.data;
+  var data = _ref.data;
 
-    return _react2.default.createElement(
-        AppContainer,
-        null,
-        'Welcome to My First SSR By ',
-        data,
-        _react2.default.createElement('br', null),
-        '\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89\uD83C\uDF89'
-    );
+  return _react2.default.createElement(
+    AppContainer,
+    null,
+    _react2.default.createElement(_grid2.default, { repos: data })
+  );
 };
 
 exports.default = App;
@@ -15584,6 +15585,76 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
 
     return targetComponent;
 };
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Grid = function Grid(_ref) {
+    var repos = _ref.repos;
+
+    return _react2.default.createElement(
+        'ul',
+        { className: 'grid' },
+        repos.map(function (_ref2, i) {
+            var name = _ref2.name,
+                owner = _ref2.owner,
+                stargazers_count = _ref2.stargazers_count,
+                html_url = _ref2.html_url;
+            return _react2.default.createElement(
+                'li',
+                { key: name },
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    '#',
+                    i + 1
+                ),
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: html_url },
+                        name
+                    )
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    'by ',
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://github.com/' + owner.login },
+                        '@',
+                        owner.login
+                    )
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    stargazers_count.toLocaleString(),
+                    ' stars'
+                )
+            );
+        })
+    );
+};
+
+exports.default = Grid;
 
 /***/ })
 /******/ ]);
