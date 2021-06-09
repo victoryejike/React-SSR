@@ -15606,6 +15606,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Grid = function Grid(_ref) {
     var repos = _ref.repos;
 
+    console.log(repos);
     return _react2.default.createElement(
         'ul',
         { className: 'grid' },

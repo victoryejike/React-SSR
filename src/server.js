@@ -7,17 +7,22 @@ import App from './client/App';
 //import Html from './client/Html';
 import serialize from 'serialize-javascript';
 import { fetchPopularRepos } from './client/api';
+import { matchPath } from 'react-router-dom';
+import routes from './client/routes';
 
 const app = express();
 app.use(cors());
 app.use(express.static('dist'))
 
 app.get('/', (req, res)=>{
-    const name = 'Ejike'
     const sheet = new ServerStyleSheet() //creates stylesheet
+    const activeRoute = routes.find(route=>(matchPath(req.url, route))) || {}
+    console.log(activeRoute)
 
-    fetchPopularRepos()
-    .then(data=>{
+    const promise = activeRoute.fetchInitialData ? activeRoute.fetchInitialData(req.path) : Promise.resolve()
+
+    promise.then(data=>{
+        console.log(data)
         const body = renderToString(sheet.collectStyles(<App data={data} />)); //collects stylesheet
         const styleTags = sheet.getStyleTags() //gets all the tags in the html
         const title = `Server Side Rendered React Application`
@@ -37,8 +42,7 @@ app.get('/', (req, res)=>{
             </body>
         </html>`
         )
-    })
-    
+    }).catch(err=>console.warn(err))
     
 })
 
