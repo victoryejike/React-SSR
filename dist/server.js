@@ -225,25 +225,22 @@ var app = (0, _express2.default)();
 app.use((0, _cors2.default)());
 app.use(_express2.default.static('dist'));
 
-app.get('/', function (req, res) {
-    var sheet = new _styledComponents.ServerStyleSheet(); //creates stylesheet
-    var activeRoute = _routes2.default.find(function (route) {
-        return (0, _reactRouterDom.matchPath)(req.url, route);
-    }) || {};
-    console.log(activeRoute);
+app.get('/', function (req, res, next) {
+  var sheet = new _styledComponents.ServerStyleSheet(); //creates stylesheet
 
-    var promise = activeRoute.fetchInitialData ? activeRoute.fetchInitialData(req.path) : Promise.resolve();
+  var activeRoute = _routes2.default.find(function (route) {
+    return (0, _reactRouterDom.matchPath)(req.url, route);
+  }) || {};
+  console.log(activeRoute);
 
-    promise.then(function (data) {
-        console.log(data);
-        var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, { data: data }))); //collects stylesheet
-        var styleTags = sheet.getStyleTags(); //gets all the tags in the html
-        var title = 'Server Side Rendered React Application';
+  var promise = activeRoute.fetchInitialData ? activeRoute.fetchInitialData(req.path) : Promise.resolve();
 
-        res.send('\n        <!DOCTYPE html>\n        <html>\n            <head>\n                <title>' + title + '</title>\n                ' + styleTags + '\n                <script src="/bundle.js" defer></script>\n            </head>\n            <body style=\'margin: 0\'>\n                <div id=\'root\'>' + body + '</div>\n\n                <script>window.__INITIAL_DATA__ = ' + (0, _serializeJavascript2.default)(data) + '</script>\n            </body>\n        </html>');
-    }).catch(function (err) {
-        return console.warn(err);
-    });
+  promise.then(function (data) {
+    var body = (0, _server.renderToString)(sheet.collectStyles(_react2.default.createElement(_App2.default, { data: data }))); //collects stylesheet
+    var styleTags = sheet.getStyleTags(); //gets all the tags in the html
+    var title = 'Server Side Rendered React Application';
+    res.send('\n      <!DOCTYPE html>\n      <html>\n        <head>\n          <title>' + title + '</title>\n          <script src="/bundle.js" defer></script>\n          ' + styleTags + '\n          <script>window.__INITIAL_DATA__ = ' + (0, _serializeJavascript2.default)(data) + '</script>\n        </head>\n\n        <body>\n          <div id="app">' + body + '</div>\n        </body>\n      </html>\n    ');
+  }).catch(next);
 });
 
 var port = 3000;
@@ -363,9 +360,9 @@ var routes = [{
     component: _grid2.default,
     fetchInitialData: function fetchInitialData() {
         var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
         return (0, _api.fetchPopularRepos)(path.split('/').pop());
     }
+
 }];
 
 exports.default = routes;

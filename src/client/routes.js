@@ -11,9 +11,8 @@ const routes = [
     {
         path: '/popular/:id',
         component: Grid,
-        fetchInitialData: (path = '') =>  {
-           return fetchPopularRepos(path.split('/').pop())
-        }
+        fetchInitialData: (path = '') => fetchPopularRepos(path.split('/').pop())
+        
     }
 ]
 

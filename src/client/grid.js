@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Grid = ({ repos }) => {
-    console.log(repos)
+    console.log(reposx)
     return(
         <ul className='grid'>
             {repos.map(({ name, owner, stargazers_count, html_url }, i) => (
