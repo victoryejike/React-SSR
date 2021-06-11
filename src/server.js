@@ -27,7 +27,7 @@ app.get('/', (req, res, next)=>{
     : Promise.resolve()
 
   promise.then((data) => {
-    const body = renderToString(sheet.collectStyles(<StaticRouter location={req.url} context={{}}><App data={data} /></StaticRouter>)); //collects stylesheet
+    const body = renderToString(sheet.collectStyles(<StaticRouter location={req.url} context={{ data }}><App /></StaticRouter>)); //collects stylesheet
     const styleTags = sheet.getStyleTags() //gets all the tags in the html
     const title = `Server Side Rendered React Application`
     res.send(`

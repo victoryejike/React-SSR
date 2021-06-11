@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Grid from './grid'
 import routes from './routes'
+import { Navbar } from './Navbar'
+import { NoMatch } from './NoMatch'
+import { Switch, Route } from 'react-router-dom'
 
 // Our single Styled Component definition
 const AppContainer = styled.div`
@@ -17,18 +20,22 @@ const AppContainer = styled.div`
 
 const App = ({ data }) => {
     return (
-        <AppContainer>
-          <div className='container'>
-            {routes.map(({ path, exact, fetchInitialData, component: C }) => (
-              <Route key={path} path={path} exact={exact}>
-                <C
+      <AppContainer>
+        <div className='container'>
+          <Navbar/>
+            <Switch>
+              {routes.map(({ path, exact, fetchInitialData, component: C }) => (
+                <Route key={path} path={path} exact={exact} render={(props)=> (<C
                   fetchInitialData={fetchInitialData}
-                  repos={data}
-                />
+                  { ...props }
+                />)} />
+              ))}
+              <Route path='*'>
+                <NoMatch />
               </Route>
-            ))}
+            </Switch>
           </div>
-        </AppContainer>
+      </AppContainer>
     )
 }
 
